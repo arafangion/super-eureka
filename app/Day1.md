@@ -5,7 +5,7 @@ First, lets get the imports out of the way:
 ```haskell
 module Day1 where
 
-import Data.List (transpose)
+import qualified Data.List
 ```
 
 Lets load the sample data, here it's so short, lets load it by hand:
@@ -73,7 +73,7 @@ day1p1 = do
     part1Measurements = dataMeasurements $ lines part1
     part1result = increases part1Measurements
 
-  print $ "Day 1 part 1 results in: " <> show part1result
+  putStrLn $ "Day 1 part 1 results in: " <> show part1result
 ```
 
 
@@ -112,7 +112,7 @@ sliding x measurements =
     offsetted :: [ [Int] ]
     offsetted = map (\(x, lst) -> drop x lst) enumeratedLists
 
-    transposed = transpose offsetted
+    transposed = Data.List.transpose offsetted
     -- The windowing function produces shorter windows towards the end, so discard those
     filtered = filter (\lst -> length lst == x) transposed
   in
@@ -150,4 +150,44 @@ day1p2 = do
     part1Measurements = dataMeasurements $ lines part1
     part1result = increasesP2 part1Measurements
 
-  print $ "Day 1 part 2 results in: " <> show part1result
+  putStrLn $ "Day 1 part 2 results in: " <> show part1result
+```
+
+# Discussion
+
+After looking at other solutions and discussing with people, it turns out that there's a very obvious way to implement the sliding function:
+
+```haskell
+slidingR1 measurements = take 3 <$> Data.List.tails measurements
+
+increasesP2R1 :: [ Int ] -> Int
+increasesP2R1 measurements = 
+  let 
+    pairs :: [ (Int, Int) ]
+    pairs = pairwise $ map sum (slidingR1 measurements)
+    f (prev, next) acc = if next > prev
+                         then acc + 1
+                         else acc
+  in
+    foldr f 0 pairs
+
+day1p2r1 :: IO ()
+day1p2r1 = do
+  part1 <- dataDay1Part1
+  let
+    part1Measurements = dataMeasurements $ lines part1
+    part1result = increasesP2 part1Measurements
+
+  putStrLn $ "Day 1 part 2 results in: " <> show part1result <> " <-- Revision 1"
+```
+
+
+# Bringing it together for main:
+
+```haskell
+day1 = do
+  day1p1
+  day1p2
+  day1p2r1
+
+```

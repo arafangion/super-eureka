@@ -5,8 +5,7 @@ import Day1
 
 main :: IO ()
 main = do
-  print "Advent of Code 2021!"
+  putStrLn "Advent of Code 2021!"
 
-  day1p1
-  day1p2
+  day1
 ```
