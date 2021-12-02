@@ -100,6 +100,8 @@ In order to impelment that bit, we need to be able to define a sliding window gi
 
 Here, I am applying a sliding window by duplicating the measurement lists, offsetting them by dropping the first few items appropriately and then zipping them up again.
 
+*Note: Other people have a far simpler and better implementation of sliding windows. See the Discussion*
+
 ```haskell
 
 sliding :: Int -> [Int] -> [[Int]]
