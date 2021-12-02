@@ -81,10 +81,48 @@ day2p1 = do
 
 ```
 
+# And now for the twist (Part 2)
+
+Looks like we need to write a new interpreter:
+
+```haskell
+
+interpret2 :: [ (String, Int) ] -> (Int, Int, Int) -> (Int, Int, Int)
+interpret2 ((direction,amount):xs) (position,depth,aim) =
+  interpret2
+    xs 
+    (
+      case direction of
+        "forward" -> (position + amount, depth + aim * amount, aim)
+        "up" -> (position, depth, aim - amount)
+        "down" -> (position, depth, aim + amount)
+    )
+interpret2 [] result = result
+```
+
+Testing THAT out results in:
+
+```
+ghci> interpret2 (exampleData exampleLines) (0, 0, 0)
+(15,60,10)
+```
+
+So that gives us the 15 * 60, which is 900.  Awesome. Lets plug that in:
+
+```haskell
+day2p2 = do
+  inputData <- lines <$> readFile "data/day2p1"
+
+  let (pos, depth, _) = interpret2 (exampleData inputData) (0, 0, 0)
+
+  putStrLn $ "Day 2 Part 2 results in: " <> show (pos * depth)
+
+```
+
 # Tying it together:
 
 ```haskell
 day2 = do
   day2p1
-  putStrLn "Day 2...  TBD"
+  day2p2
 ```
