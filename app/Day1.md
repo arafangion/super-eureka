@@ -181,6 +181,20 @@ day1p2r1 = do
   putStrLn $ "Day 1 part 2 results in: " <> show part1result <> " <-- Revision 1"
 ```
 
+I've also had merijn show his sliding window:
+```
+slidingWindow :: (Ord a, Num a) => [a] -> [a]
+slidingWindow (x1:xs@(x2:x3:_)) = x1 + x2 + x3 : slidingWindow xs
+slidingWindow _ = []
+```
+
+That one is my favorite, because:
+* It's short.
+* It does exactly what's required: Produce a list containing the sums of each sliding window, 3 at a time.
+* And it's not overly flexible in ways that aren't yet needed!  We don't need to have variable sliding windows, so why bother making the function generic?
+
+
+And that's my favorite solution 
 
 # Bringing it together for main:
 
